@@ -1,0 +1,41 @@
+// Express js install in node
+
+npm init -y
+npm install express --save
+
+//nodemon
+
+npm install nodemon --save -dev
+
+
+// Mongo db
+
+install -mongodb
+install -shell
+from mongodb.com
+
+
+// encryption
+
+npm install bcryptjs
+
+//jwt
+
+npm install jasonwebtoken
+
+// mail
+
+npm inatall nodemailer
+
+
+ npm install rate limit
+
+ npm install express-mongo-sanitize
+
+   filter $ AND . IN REQUEST
+
+ npm install helmet
+
+ handle http request headers
+
+ npm i xss-clean

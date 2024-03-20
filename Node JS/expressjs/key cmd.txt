@@ -1,0 +1,15 @@
+// Express js install in node
+
+npm init -y
+npm install express --save
+
+//nodemon
+
+npm install nodemon --save -dev
+
+
+// Mongo db
+
+install -mongodb
+install -shell
+from mongodb.com

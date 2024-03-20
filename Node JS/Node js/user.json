@@ -1,0 +1,24 @@
+{
+ "list_of_users":{
+    "user_1":{
+        "ID":"1000",
+        "Name":"Raja"
+    },
+    "user_2":{
+        "ID":"2000",
+        "Name":"Sharan"
+    },
+    "user_3":{
+        "ID":"3000",
+        "Name":"Vengi"
+    },
+    "user_4":{
+        "ID":"4000",
+        "Name":"Ajay"
+    }
+}
+}
+
+
+
+
