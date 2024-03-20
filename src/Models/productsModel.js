@@ -13,6 +13,7 @@ const productsModel = new mongoose.Schema({
     type: String,
     required: true,
   },
+  additionalInformation: {},
   quantity: {
     type: Number,
     required: true,
