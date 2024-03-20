@@ -23,14 +23,14 @@ const getAllData = async (query, queryStr) => {
     const limitData = queryStr.limit * 1 || 10;
     const skip = (pageData - 1) * limitData;
 
-    var userData = query
+    var data = query
       .find(queryobj2, queryStr.fields, {
         skip: skip,
         limit: limitData,
         sort: queryStr.sort,
       })
       .populate({ path: "tags", select: ["title", "description"] });
-    var response = await userData;
+    var response = await data;
     return { status: "success", data: response };
   } catch (err) {
     return { status: "fail", message: err.message };
@@ -44,9 +44,9 @@ const findData = async (query, queryStr) => {
     const pageData = queryStr.page * 1 || 1;
     const limitData = queryStr.limit * 1 || 10;
     const skip = (pageData - 1) * limitData;
-    var userData;
+    var data;
     if (queryStr.fields != undefined) {
-      userData = query
+      data = query
         .find(queryobj2, queryStr.fields, {
           skip: skip,
           limit: limitData,
@@ -54,7 +54,7 @@ const findData = async (query, queryStr) => {
         })
         .populate({ path: "tags", select: ["title", "description"] });
     } else {
-      userData = query
+      data = query
         .find(
           queryobj2,
           { createdAt: 0, createdBy: 0, productActiveStatus: 0, __v: 0 },
@@ -66,7 +66,7 @@ const findData = async (query, queryStr) => {
         )
         .populate({ path: "tags", select: ["title", "description"] });
     }
-    var response = await userData;
+    var response = await data;
     return { status: "success", data: response };
   } catch (err) {
     return { status: "fail", message: err.message };

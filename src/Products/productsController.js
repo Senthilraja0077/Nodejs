@@ -32,7 +32,7 @@ const getallProducts = async (req, res, next) => {
       serverResponse.data.length != 0
     ) {
       res.status(200).json({
-        Users: serverResponse,
+        serverResponse,
       });
     } else if (serverResponse.data.length == 0) {
       const error = new CustomError("Page dosent exit ", 404);
@@ -49,7 +49,7 @@ const getallProducts = async (req, res, next) => {
       serverResponse.data.length != 0
     ) {
       res.status(200).json({
-        Users: serverResponse,
+        serverResponse,
       });
     } else if (serverResponse.data.length == 0) {
       const error = new CustomError("Page dosent exit ", 404);
