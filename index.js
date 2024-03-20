@@ -29,7 +29,7 @@ const helmet = require("helmet");
 //const xss = require("xss-clean");
 app.use(helmet());
 app.use(sanitize());
-console.log("----zzzzzz");
+
 // app.use(xss());
 //---->RATE LIMIT - LIMIT THE REQUEST
 let limiter = rateLimit({
