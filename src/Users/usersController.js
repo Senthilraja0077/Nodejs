@@ -355,7 +355,7 @@ const getAllUserData = async (req, res, next) => {
   const serverResponse = await users_data.find(req.query);
   if (serverResponse.status === "success" && serverResponse.data.length != 0) {
     res.status(200).json({
-      Users: serverResponse,
+      serverResponse,
     });
   } else if (serverResponse.data.length == 0) {
     const error = new CustomError("Page dosent exit ", 404);

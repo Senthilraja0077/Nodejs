@@ -1,4 +1,4 @@
-const { ObjectId } = require("mongodb");
+const { ObjectId, Decimal128 } = require("mongodb");
 const mongoose = require("mongoose");
 const productsModel = new mongoose.Schema({
   productPicture: {
@@ -19,7 +19,7 @@ const productsModel = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: String,
+    type: Decimal128,
     required: true,
   },
   productActiveStatus: {
