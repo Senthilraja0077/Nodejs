@@ -32,7 +32,7 @@ app.use(sanitize());
 // app.use(xss());
 //---->RATE LIMIT - LIMIT THE REQUEST
 let limiter = rateLimit({
-  max: 1000,
+  max: 10000,
   windowMs: 60 * 60 * 1000,
   message:
     "We have recieved too many requests from this IP. please try after 1 hr ",

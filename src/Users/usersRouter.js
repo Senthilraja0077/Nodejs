@@ -33,5 +33,4 @@ router.delete(
   usersDataController.protect,
   usersDataController.deleteMe
 );
-
 module.exports = router;
