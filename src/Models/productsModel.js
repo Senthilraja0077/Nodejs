@@ -14,10 +14,7 @@ const productsModel = new mongoose.Schema({
     required: true,
   },
   additionalInformation: {},
-  quantity: {
-    type: Number,
-    required: true,
-  },
+  //soldBy: { type: mongoose.Schema.ObjectId, ref: "UsersData" },
   price: {
     type: Decimal128,
     required: true,

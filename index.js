@@ -19,6 +19,7 @@ mongoose.connect(process.env.CLOUD_CONN_STR, {}).then((conn) => {
 const userData = require("./src/Users/usersRouter");
 const productsData = require("./src/Products/productsRouter");
 const tagsData = require("./src/Tags/tagsRouter");
+const inventoryData = require("./src/Inventory/inventoryRouter");
 //const requestsData = require("./src/Requests/requestsRouter");
 //-->ERROR HANDLERS
 const CustomError = require("./src/ErrorHandlers/CustomErrorHandler");
@@ -56,6 +57,7 @@ app.use((req, res, next) => {
 app.use(userData);
 app.use(productsData);
 app.use(tagsData);
+app.use(inventoryData);
 //app.use(requestsData);
 //----> ERROR HANDLING FOR INCORRECT PATH
 app.all("*", (req, res, next) => {

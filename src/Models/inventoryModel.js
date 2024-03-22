@@ -1,6 +1,7 @@
+const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 const inventoryModel = new mongoose.Schema({
-  product: { type: String, required: true, unique: true },
+  productId: { type: ObjectId },
   quantity: { type: Number, required: true },
   createdAt: {
     type: Date,

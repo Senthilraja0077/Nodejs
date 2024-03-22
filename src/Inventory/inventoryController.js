@@ -1,6 +1,5 @@
 const globalRepo = require("./../CommonRepository/CRUDOperations");
 const inventoryModel = require("./../Models/inventoryModel");
-const inventoryService = require("./incentoryService");
 const GlobalErrorHandler = require("../ErrorHandlers/GlobalErrorHandler");
 const CustomError = require("../ErrorHandlers/CustomErrorHandler");
 const createSendResponse = (data, statusCode, res) => {

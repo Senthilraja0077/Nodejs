@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 //----> SERVICE MODULE CONNECTION
 const productsData = require("./productsService");
+const inventoryModel = require("./../Models/inventoryModel");
 //----> ERROR HANDLER CONNECTION
 const GlobalErrorHandler = require("../ErrorHandlers/GlobalErrorHandler");
 const CustomError = require("../ErrorHandlers/CustomErrorHandler");
@@ -15,54 +16,86 @@ const createSendResponse = (data, statusCode, res) => {
 // ADD PRODUCTS
 const addProducts = async (req, res, next) => {
   req.body.createdBy = req.user.data._id;
-  const response = await productsData.createProductsDetails(req.body);
+
+  let response = await productsData.createProductsDetails(req.body);
+
   if (response.status === "success") {
-    createSendResponse(response.data, 201, res);
+    // add inventory data
+    var quantity = req.body.quantity;
+    var productId = response.data._id;
+    response = response.data.toJSON();
+    try {
+      const inventoryResponse = await inventoryModel.create({
+        productId: productId,
+        quantity: quantity,
+        createdBy: req.body.createdBy,
+      });
+
+      var qua = inventoryResponse.quantity;
+      response.quantity = qua;
+      createSendResponse(response, 201, res);
+    } catch (err) {
+      next(err);
+    }
   } else {
     next(response);
   }
 };
 // GET ALL PRODUCTS DETAILS
 const getallProducts = async (req, res, next) => {
-  // IF ROLE IS ADMIN
-  if (req.user.data.role == "admin") {
-    const serverResponse = await productsData.getAllProductDetails(req.query);
-    if (
-      serverResponse.status === "success" &&
-      serverResponse.data.length != 0
-    ) {
-      res.status(200).json({
-        serverResponse,
-      });
-    } else if (serverResponse.data.length == 0) {
-      const error = new CustomError("Page dosent exit ", 404);
-      next(error);
-    } else {
-      next(serverResponse);
-    }
+  let serverResponse = await productsData.getAllProductDetails(req.query);
+  var data = serverResponse.data;
+  console.log(data.length);
+  var newData = [];
+  var quantityData;
+  for (var i = 0; i < data.length; i++) {
+    quantityData = await inventoryModel.findOne({
+      productId: data[i]._id,
+    });
+    var responseData = data[i].toJSON();
+    responseData.quantity = quantityData.quantity;
+    newData.push(responseData);
   }
-  // IF ROLE IS USER OR OTHERS
-  else {
-    const serverResponse = await productsData.getLimitFields(req.query);
-    if (
-      serverResponse.status === "success" &&
-      serverResponse.data.length != 0
-    ) {
-      res.status(200).json({
-        serverResponse,
-      });
-    } else if (serverResponse.data.length == 0) {
-      const error = new CustomError("Page dosent exit ", 404);
-      next(error);
-    } else {
-      next(serverResponse);
-    }
+  if (serverResponse.status === "success" && serverResponse.data.length != 0) {
+    res.status(200).json({
+      newData,
+    });
+  } else if (serverResponse.data.length == 0) {
+    const error = new CustomError("Page dosent exit ", 404);
+    next(error);
+  } else {
+    next(serverResponse);
   }
+
+  // // IF ROLE IS USER OR OTHERS
+  // else {
+  //   const serverResponse = await productsData.getLimitFields(req.query);
+  //   if (
+  //     serverResponse.status === "success" &&
+  //     serverResponse.data.length != 0
+  //   ) {
+  //     res.status(200).json({
+  //       serverResponse,
+  //     });
+  //   } else if (serverResponse.data.length == 0) {
+  //     const error = new CustomError("Page dosent exit ", 404);
+  //     next(error);
+  //   } else {
+  //     next(serverResponse);
+  //   }
+  // }
 };
 // UPDATE PRODUCTS
 const updateExitingUserData = async (req, res, next) => {
   req.body.updatedBy = req.user.data._id;
   const response = await productsData.updateOne(req.params.id, req.body);
+  if (req.body.quantity != null || req.body.quantity != undefined) {
+    let iventoryUpdate = await inventoryModel.findOne({
+      productId: req.params.id,
+    });
+    iventoryUpdate.quantity = req.body.quantity;
+    iventoryUpdate.save();
+  }
   if (response.status == "success" && response.data != null) {
     res.status(200).json({
       status: "success",
@@ -78,9 +111,16 @@ const updateExitingUserData = async (req, res, next) => {
   }
 };
 // DELETE PRODUCTS
+
 const deleteExitngProductsData = async (req, res) => {
   const response = await productsData.deleteOne(req.params.id);
   if (response.status == "success") {
+    const deleteInventory = await inventoryModel.findOne({
+      productId: req.params.id,
+    });
+    if (deleteInventory != null || deleteInventory != undefined) {
+      await inventoryModel.findOneAndDelete(deleteInventory._id);
+    }
     res.status(202).json({
       status: "success",
       message: "User data deleted successfully",
